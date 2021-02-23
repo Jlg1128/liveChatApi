@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.jlgChat.dao.MessageDao">
+    <!--  查询用户的对话  -->
+    <select id="getMessageListByBothId" resultType="com.example.jlgChat.domain.Message" parameterType="int">
+        SELECT * FROM messages WHERE sendId = #{sendId} AND targetId = #{targetId} OR
+        sendId = #{targetId} AND targetId = #{sendId};
+    </select>
+    <!--  显示聊天人员列表  -->
+    <select id="getMessageListById" resultType="com.example.jlgChat.domain.Message" parameterType="int">
+        <!--        SELECT * FROM messages WHERE sendId = #{sendId} AND targetId = #{targetId} OR-->
+        <!--        sendId = #{targetId} AND targetId = #{sendId};-->
+        SELECT * FROM messages WHERE sendId = #{uid} OR targetId = #{uid};
+    </select>
+    <!--  插入聊天  -->
+    <insert id="insertMessage" parameterType="com.example.jlgChat.domain.Message">
+        insert into
+        messages(createTime, modifyTime, chatId,targetId,sendId,ifread,targetIfread,type,msg, targetNickName,targetAvatar, sendAvatar, sendNickName)
+        values
+        (#{createTime}, #{modifyTime}, #{chatId}, #{targetId}, #{sendId}, #{ifread}, #{targetIfread}, #{type},#{msg}, #{targetNickName}, #{targetAvatar}, #{sendAvatar}, #{sendNickName})
+    </insert>
+    <update id="updateRead" parameterType="int" >
+        update messages set targetIfread=1 where sendId = #{sendId} AND targetId = #{targetId}
+    </update>
+</mapper>

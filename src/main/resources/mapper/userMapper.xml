@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.jlgChat.dao.UserDao">
+    <!--  查询所有用户  -->
+    <select id="getAllUser" resultType="com.example.jlgChat.domain.User" >
+        SELECT * FROM users;
+    </select>
+    <!-- 根据id查 -->
+    <select id="getUserByUserId" resultType="com.example.jlgChat.domain.User"  parameterType="long">
+        SELECT * FROM users WHERE uid = #{uid};
+    </select>
+    <!-- 根据nickName查 -->
+    <select id="getUserByNickName" resultType="com.example.jlgChat.domain.User"  parameterType="String">
+        SELECT * FROM users WHERE nickName = #{nickName};
+    </select>
+    <!-- 查所有的邮箱 -->
+    <select id="getUserByEmail" resultType="com.example.jlgChat.domain.User">
+        SELECT * FROM users where email = #{email};
+    </select>
+    <!--  增  -->
+    <insert id="insertUser" parameterType="com.example.jlgChat.domain.User">
+        insert into
+        users(uid, createTime, nickName, password, avatar, signature, phoneNumber, email)
+        values
+        (#{uid},#{createTime},#{nickName},#{password},#{avatar},#{signature},#{phoneNumber},#{email})
+    </insert>
+    <!--  删  -->
+    <delete id="deleteUserById" parameterType="long">
+        delete from users where uid = #{uid};
+    </delete>
+    <!--  改  -->
+    <update id="updateUserByNickName" parameterType="com.example.jlgChat.domain.User" >
+        update users set avatar=#{avatar}, signature=#{signature}, phoneNumber=#{phoneNumber}, email=#{email} where nickName=#{nickName};
+    </update>
+    <!--  改  -->
+    <update id="updateAvatar" parameterType="com.example.jlgChat.domain.User" >
+        update users set avatar=#{avatar}
+        <where>
+            <if test="nickName!=null">
+                nickName = #{nickName}
+            </if>
+            <if test="uid!=null">
+                uid = #{uid}
+            </if>
+        </where>
+    </update>
+    <!--  添加好友相关  -->
+    <select id="getFriendsList" resultType="String"  parameterType="int">
+        SELECT friends FROM users WHERE uid = #{uid};
+    </select>
+    <update id="updateFriendsList">
+        update users set friends=#{friendsList} where uid = #{uid}
+    </update>
+    <!--    -->
+</mapper>
