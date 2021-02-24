@@ -89,13 +89,16 @@ public class SocketIOServiceImpl implements ISocketIOService {
             SocketIOClient myClient = this.clientMap.get(EventName);
             System.out.println("targetId🐶" + targetId);
             SocketIOClient messageListClient = this.clientMap.get(String.valueOf(targetId));
+
             SocketIOClient myClient2 = this.clientMap.get(targetClientId);
             myClient.sendEvent(EventName, messageList);
 //            myClient2.sendEvent(targetClientId, messageList);
             System.out.println("事件名称" + targetId);
             messageListClient.sendEvent(String.valueOf(targetId), true);
 //            messageListClient.sendEvent(targetClientId, messageList);
-            myClient2.sendEvent(targetClientId, messageList);
+            if (myClient2 != null) {
+                myClient.sendEvent(targetClientId, messageList);
+            }
             log.debug(clientIp + " ************ 客户端：" + data);
         });
     }
